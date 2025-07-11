@@ -4,16 +4,16 @@ import { Lock, Mail, User } from 'lucide-react-native';
 import { useState } from 'react';
 import {
     Alert,
+    Image,
     StyleSheet,
     Text,
     TextInput,
-    TouchableOpacity,
-    View,
+    TouchableOpacity
 } from 'react-native';
+import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 
 
 export default function RegisterScreen() {
-
 
     const router = useRouter();
 
@@ -90,10 +90,28 @@ export default function RegisterScreen() {
             colors={['#89f7fe', '#66a6ff']}
             style={styles.container}
         >
-            <Text style={styles.title}>Create your account</Text>
+            <Animated.View
+                style={styles.logos}
+                entering={FadeInUp.duration(200)}
+            >
+                <Image
+                    source={require('../assets/images/react-logo.png')}
+                    style={{ width: 100, height: 100 }}
+                    resizeMode="contain"
+                />
+                <Animated.Text
+                    style={styles.title}
+                    entering={FadeInUp.duration(200)}
+                >
+                    Create your account
+                </Animated.Text>
+            </Animated.View>
 
             {/* Username */}
-            <View style={styles.inputWrapper}>
+            <Animated.View
+                style={styles.inputWrapper}
+                entering={FadeInDown.delay(200).duration(200)}
+            >
                 <User size={20} color="#333" style={styles.icon} />
                 <TextInput
                     style={styles.input}
@@ -101,11 +119,14 @@ export default function RegisterScreen() {
                     placeholderTextColor="#666"
                     onChangeText={(text) => setFormData({ ...formData, username: text })}
                 />
-            </View>
+            </Animated.View>
             {errors.username ? <Text style={styles.error}>{errors.username}</Text> : null}
 
             {/* Email */}
-            <View style={styles.inputWrapper}>
+            <Animated.View
+                style={styles.inputWrapper}
+                entering={FadeInDown.delay(200).duration(200)}
+            >
                 <Mail size={20} color="#333" style={styles.icon} />
                 <TextInput
                     style={styles.input}
@@ -115,11 +136,14 @@ export default function RegisterScreen() {
                     autoCapitalize="none"
                     onChangeText={(text) => setFormData({ ...formData, email: text })}
                 />
-            </View>
+            </Animated.View>
             {errors.email ? <Text style={styles.error}>{errors.email}</Text> : null}
 
             {/* Password */}
-            <View style={styles.inputWrapper}>
+            <Animated.View
+                style={styles.inputWrapper}
+                entering={FadeInDown.delay(200).duration(200)}
+            >
                 <Lock size={20} color="#333" style={styles.icon} />
                 <TextInput
                     style={styles.input}
@@ -128,11 +152,14 @@ export default function RegisterScreen() {
                     secureTextEntry
                     onChangeText={(text) => setFormData({ ...formData, password: text })}
                 />
-            </View>
+            </Animated.View>
             {errors.password ? <Text style={styles.error}>{errors.password}</Text> : null}
 
             {/* Confirm Password */}
-            <View style={styles.inputWrapper}>
+            <Animated.View
+                style={styles.inputWrapper}
+                entering={FadeInDown.delay(200).duration(200)}
+            >
                 <Lock size={20} color="#333" style={styles.icon} />
                 <TextInput
                     style={styles.input}
@@ -143,22 +170,31 @@ export default function RegisterScreen() {
                         setFormData({ ...formData, confirmPassword: text })
                     }
                 />
-            </View>
+            </Animated.View>
             {errors.confirmPassword ? (
                 <Text style={styles.error}>{errors.confirmPassword}</Text>
             ) : null}
 
-            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                <Text style={styles.buttonText}>Register</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-                style={styles.loginRedirect}
-                onPress={() => router.push('/Login')}
+            <Animated.View
+                entering={FadeInDown.delay(200).duration(200)}
             >
-                <Text>Already have an account? </Text>
-                <Text style={{ color: '#007bff' }}>Login</Text>
-            </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                    <Text style={[styles.buttonText, { fontFamily: 'sans-medium' }]}>Register</Text>
+                </TouchableOpacity>
+            </Animated.View>
+
+            <Animated.View
+                style={styles.loginRedirect}
+                entering={FadeInDown.delay(200).duration(200)}
+            >
+                <TouchableOpacity
+                    onPress={() => router.push('/Login')}
+                    style={{ flexDirection: 'row', alignItems: 'center' }}
+                >
+                    <Text>Already have an account? </Text>
+                    <Text style={{ color: '#007bff' }}>Login</Text>
+                </TouchableOpacity>
+            </Animated.View>
         </LinearGradient>
     );
 }
@@ -168,6 +204,10 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
         justifyContent: 'center',
+        fontFamily: 'sans-medium',
+    },
+    logos: {
+        alignItems: 'center',
     },
     title: {
         fontSize: 30,
@@ -175,7 +215,7 @@ const styles = StyleSheet.create({
         marginBottom: 30,
         textAlign: 'center',
         color: 'black',
-        fontFamily: '',
+        fontFamily: 'sans-medium',
     },
     inputWrapper: {
         flexDirection: 'row',
@@ -215,6 +255,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 18,
         fontWeight: 'bold',
+        fontFamily: 'sans-medium',
     },
     loginRedirect: {
         marginTop: 20,

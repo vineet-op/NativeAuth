@@ -1,34 +1,83 @@
-import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 import { Lock, User } from 'lucide-react-native';
 import { useState } from 'react';
 import {
+    Alert,
     StyleSheet,
-    Text,
     TextInput,
-    TouchableOpacity,
-    View,
+    TouchableOpacity
 } from 'react-native';
+import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
+
 
 export default function LoginScreen() {
-    const navigation = useNavigation();
 
+    const router = useRouter();
     const [formData, setFormData] = useState({
         username: '',
         password: '',
     });
 
+    const [errors, setErrors] = useState({
+        username: '',
+        password: '',
+    });
+
+    const HARD_CODED_USER = {
+        username: 'user',
+        password: 'password123',
+    };
+
     const handleSubmit = () => {
-        console.log('Form submitted:', formData);
-        // Add login logic here
+        let hasError = false;
+        let newErrors = { username: '', email: '', password: '', confirmPassword: '' };
+
+        if (!formData.username) {
+            newErrors.username = 'Username is required';
+            hasError = true;
+        }
+
+
+
+        if (!formData.password) {
+            newErrors.password = 'Password is required';
+            hasError = true;
+        } else if (formData.password.length < 6) {
+            newErrors.password = 'Password must be at least 6 characters';
+            hasError = true;
+        }
+        setErrors(newErrors);
+        if (hasError) return;
+
+        if (
+            formData.username === HARD_CODED_USER.username &&
+            formData.password === HARD_CODED_USER.password
+        ) {
+            router.push({
+                pathname: '/Homepage',
+                params: { username: formData.username },
+            });
+        } else {
+            Alert.alert('Invalid registration details');
+        }
     };
 
     return (
+
         <LinearGradient colors={['#89f7fe', '#66a6ff']} style={styles.container}>
-            <Text style={styles.title}>Login into your account</Text>
+            <Animated.Text
+                style={styles.title}
+                entering={FadeInUp.duration(200)}
+            >
+                Login into your account
+            </Animated.Text>
 
             {/* Username */}
-            <View style={styles.inputWrapper}>
+            <Animated.View
+                style={styles.inputWrapper}
+                entering={FadeInDown.delay(200).duration(200)}
+            >
                 <User size={20} color="#333" style={styles.icon} />
                 <TextInput
                     style={styles.input}
@@ -38,10 +87,13 @@ export default function LoginScreen() {
                     autoCapitalize="none"
                     onChangeText={(text) => setFormData({ ...formData, username: text })}
                 />
-            </View>
+            </Animated.View>
 
             {/* Password */}
-            <View style={styles.inputWrapper}>
+            <Animated.View
+                style={styles.inputWrapper}
+                entering={FadeInDown.delay(200).duration(200)}
+            >
                 <Lock size={20} color="#333" style={styles.icon} />
                 <TextInput
                     style={styles.input}
@@ -50,18 +102,35 @@ export default function LoginScreen() {
                     secureTextEntry
                     onChangeText={(text) => setFormData({ ...formData, password: text })}
                 />
-            </View>
+            </Animated.View>
 
-            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                <Text style={styles.buttonText}>Login</Text>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={handleSubmit}
+            >
+                <Animated.Text
+                    style={styles.buttonText}
+                    entering={FadeInDown.delay(200).duration(200)}
+                >
+                    Login
+                </Animated.Text>
             </TouchableOpacity>
 
             <TouchableOpacity
                 style={styles.redirect}
-                onPress={() => navigation.navigate('Register' as never)}
+                onPress={() => router.push('/Register')}
             >
-                <Text>Don't have an account? </Text>
-                <Text style={{ color: '#007bff' }}>Register</Text>
+                <Animated.Text
+                    entering={FadeInDown.delay(200).duration(200)}
+                >
+                    Don't have an account?
+                </Animated.Text>
+                <Animated.Text
+                    style={{ color: '#007bff' }}
+                    entering={FadeInDown.delay(200).duration(200)}
+                >
+                    {" "}Register
+                </Animated.Text>
             </TouchableOpacity>
         </LinearGradient>
     );
@@ -78,7 +147,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 30,
         textAlign: 'center',
-        color: '#fff',
+        color: 'black',
     },
     inputWrapper: {
         flexDirection: 'row',
@@ -105,7 +174,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     buttonText: {
-        color: 'black',
+        color: 'white',
         fontSize: 18,
         fontWeight: 'bold',
     },
