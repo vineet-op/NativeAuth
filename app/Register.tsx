@@ -1,112 +1,224 @@
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { Lock, Mail, User } from 'lucide-react-native';
 import { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+    Alert,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from 'react-native';
+
 
 export default function RegisterScreen() {
+
+
+    const router = useRouter();
+
+    const HARD_CODED_USER = {
+        username: 'user',
+        email: 'user@example.com',
+        password: 'password123',
+        confirmPassword: 'password123',
+    };
 
     const [formData, setFormData] = useState({
         username: '',
         email: '',
         password: '',
-        confirmPassword: ''
-    })
+        confirmPassword: '',
+    });
+
+    const [errors, setErrors] = useState({
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+    });
+
+    const handleSubmit = () => {
+        let hasError = false;
+        let newErrors = { username: '', email: '', password: '', confirmPassword: '' };
+
+        if (!formData.username) {
+            newErrors.username = 'Username is required';
+            hasError = true;
+        }
+
+        if (!formData.email) {
+            newErrors.email = 'Email is required';
+            hasError = true;
+        } else if (!formData.email.includes('@')) {
+            newErrors.email = 'Invalid email format';
+            hasError = true;
+        }
+
+        if (!formData.password) {
+            newErrors.password = 'Password is required';
+            hasError = true;
+        } else if (formData.password.length < 6) {
+            newErrors.password = 'Password must be at least 6 characters';
+            hasError = true;
+        }
+
+        if (!formData.confirmPassword) {
+            newErrors.confirmPassword = 'Please confirm your password';
+            hasError = true;
+        } else if (formData.password !== formData.confirmPassword) {
+            newErrors.confirmPassword = 'Passwords do not match';
+            hasError = true;
+        }
+
+        setErrors(newErrors);
+        if (hasError) return;
+
+        if (
+            formData.username === HARD_CODED_USER.username &&
+            formData.email === HARD_CODED_USER.email &&
+            formData.password === HARD_CODED_USER.password
+        ) {
+            router.push('/Login');
+        } else {
+            Alert.alert('Invalid registration details');
+        }
+    };
 
     return (
-        <View style={styles.container}>
+        <LinearGradient
+            colors={['#89f7fe', '#66a6ff']}
+            style={styles.container}
+        >
             <Text style={styles.title}>Create your account</Text>
-            <View>
-                <Text style={styles.label}>Username</Text>
+
+            {/* Username */}
+            <View style={styles.inputWrapper}>
+                <User size={20} color="#333" style={styles.icon} />
                 <TextInput
                     style={styles.input}
                     placeholder="Username"
-                    keyboardType="default"
-                    autoCapitalize="none"
+                    placeholderTextColor="#666"
                     onChangeText={(text) => setFormData({ ...formData, username: text })}
                 />
             </View>
-            <View>
-                <Text style={styles.label}>Email</Text>
+            {errors.username ? <Text style={styles.error}>{errors.username}</Text> : null}
+
+            {/* Email */}
+            <View style={styles.inputWrapper}>
+                <Mail size={20} color="#333" style={styles.icon} />
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
+                    placeholderTextColor="#666"
                     keyboardType="email-address"
                     autoCapitalize="none"
                     onChangeText={(text) => setFormData({ ...formData, email: text })}
                 />
             </View>
-            <View>
-                <Text style={styles.label}>Password</Text>
+            {errors.email ? <Text style={styles.error}>{errors.email}</Text> : null}
+
+            {/* Password */}
+            <View style={styles.inputWrapper}>
+                <Lock size={20} color="#333" style={styles.icon} />
                 <TextInput
                     style={styles.input}
                     placeholder="Password"
+                    placeholderTextColor="#666"
                     secureTextEntry
                     onChangeText={(text) => setFormData({ ...formData, password: text })}
                 />
             </View>
-            <View>
-                <Text style={styles.label}>Confirm Password</Text>
+            {errors.password ? <Text style={styles.error}>{errors.password}</Text> : null}
+
+            {/* Confirm Password */}
+            <View style={styles.inputWrapper}>
+                <Lock size={20} color="#333" style={styles.icon} />
                 <TextInput
                     style={styles.input}
                     placeholder="Confirm Password"
+                    placeholderTextColor="#666"
                     secureTextEntry
-                    onChangeText={(text) => setFormData({ ...formData, confirmPassword: text })}
+                    onChangeText={(text) =>
+                        setFormData({ ...formData, confirmPassword: text })
+                    }
                 />
             </View>
-            <TouchableOpacity style={styles.button}>
+            {errors.confirmPassword ? (
+                <Text style={styles.error}>{errors.confirmPassword}</Text>
+            ) : null}
+
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                 <Text style={styles.buttonText}>Register</Text>
             </TouchableOpacity>
-        </View>
-    )
+
+            <TouchableOpacity
+                style={styles.loginRedirect}
+                onPress={() => router.push('/Login')}
+            >
+                <Text>Already have an account? </Text>
+                <Text style={{ color: '#007bff' }}>Login</Text>
+            </TouchableOpacity>
+        </LinearGradient>
+    );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        width: '100%',
-        height: '100%',
         padding: 20,
-        fontFamily: 'Roboto',
-        backgroundColor: '#f0f0f0'
+        justifyContent: 'center',
     },
     title: {
-        textAlign: 'center',
-        fontSize: 24,
+        fontSize: 30,
         fontWeight: 'bold',
-        marginBottom: 20,
-        color: '#333',
-        paddingBottom: 10,
-        fontFamily: 'Roboto',
+        marginBottom: 30,
+        textAlign: 'center',
+        color: 'black',
+        fontFamily: '',
     },
-    label: {
-        marginBottom: 5,
-        color: '#333',
-        fontSize: 16,
-        fontWeight: '500'
+    inputWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#ffffffcc',
+        borderRadius: 10,
+        paddingHorizontal: 10,
+        marginBottom: 10,
+    },
+    icon: {
+        marginRight: 8,
     },
     input: {
-        width: '100%',
+        flex: 1,
         height: 50,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        borderRadius: 10,
-        paddingHorizontal: 15,
-        marginBottom: 15,
-        backgroundColor: 'white'
+        fontSize: 16,
+        color: '#333',
+    },
+    error: {
+        color: 'red',
+        marginBottom: 10,
+        marginLeft: 5,
+        fontSize: 13,
     },
     button: {
-        width: '100%',
-        height: 50,
         backgroundColor: '#007bff',
-        justifyContent: 'center',
-        alignItems: 'center',
+        paddingVertical: 14,
         borderRadius: 10,
-        textAlign: 'center',
-        marginTop: 10
+        alignItems: 'center',
+        marginTop: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 3 },
+        shadowRadius: 4,
     },
     buttonText: {
-        color: 'white',
+        color: '#fff',
         fontSize: 18,
         fontWeight: 'bold',
-        fontFamily: 'Arial',
-    }
-})
+    },
+    loginRedirect: {
+        marginTop: 20,
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+});
