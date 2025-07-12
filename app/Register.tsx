@@ -186,7 +186,7 @@ export default function RegisterScreen() {
                     entering={FadeInDown.delay(200).duration(200)}
                 >
                     <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                        <Text style={[styles.buttonText, { fontFamily: 'sans-medium' }]}>Register</Text>
+                        <Text style={styles.buttonText}>Register</Text>
                     </TouchableOpacity>
                 </Animated.View>
 
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
         justifyContent: 'center',
-        fontFamily: 'sans-medium',
+
     },
     logos: {
         alignItems: 'center',
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
         marginBottom: 30,
         textAlign: 'center',
         color: 'black',
-        fontFamily: 'sans-medium',
+
     },
     inputWrapper: {
         flexDirection: 'row',
@@ -263,7 +263,6 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 18,
         fontWeight: 'bold',
-        fontFamily: 'sans-medium',
     },
     loginRedirect: {
         marginTop: 20,
