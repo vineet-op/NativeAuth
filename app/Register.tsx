@@ -5,6 +5,8 @@ import { useState } from 'react';
 import {
     Alert,
     Image,
+    KeyboardAvoidingView,
+    Platform,
     StyleSheet,
     Text,
     TextInput,
@@ -86,115 +88,121 @@ export default function RegisterScreen() {
     };
 
     return (
+
         <LinearGradient
             colors={['#89f7fe', '#66a6ff']}
             style={styles.container}
         >
-            <Animated.View
-                style={styles.logos}
-                entering={FadeInUp.duration(200)}
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'android' ? 'padding' : 'height'}
+                keyboardVerticalOffset={Platform.OS === 'android' ? 10 : 0}
             >
-                <Image
-                    source={require('../assets/images/react-logo.png')}
-                    style={{ width: 100, height: 100 }}
-                    resizeMode="contain"
-                />
-                <Animated.Text
-                    style={styles.title}
+                <Animated.View
+                    style={styles.logos}
                     entering={FadeInUp.duration(200)}
                 >
-                    Create your account
-                </Animated.Text>
-            </Animated.View>
+                    <Image
+                        source={require('../assets/images/react-logo.png')}
+                        style={{ width: 100, height: 100 }}
+                        resizeMode="contain"
+                    />
+                    <Animated.Text
+                        style={styles.title}
+                        entering={FadeInUp.duration(200)}
+                    >
+                        Create your account
+                    </Animated.Text>
+                </Animated.View>
 
-            {/* Username */}
-            <Animated.View
-                style={styles.inputWrapper}
-                entering={FadeInDown.delay(200).duration(200)}
-            >
-                <User size={20} color="#333" style={styles.icon} />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Username"
-                    placeholderTextColor="#666"
-                    onChangeText={(text) => setFormData({ ...formData, username: text })}
-                />
-            </Animated.View>
-            {errors.username ? <Text style={styles.error}>{errors.username}</Text> : null}
-
-            {/* Email */}
-            <Animated.View
-                style={styles.inputWrapper}
-                entering={FadeInDown.delay(200).duration(200)}
-            >
-                <Mail size={20} color="#333" style={styles.icon} />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Email"
-                    placeholderTextColor="#666"
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    onChangeText={(text) => setFormData({ ...formData, email: text })}
-                />
-            </Animated.View>
-            {errors.email ? <Text style={styles.error}>{errors.email}</Text> : null}
-
-            {/* Password */}
-            <Animated.View
-                style={styles.inputWrapper}
-                entering={FadeInDown.delay(200).duration(200)}
-            >
-                <Lock size={20} color="#333" style={styles.icon} />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Password"
-                    placeholderTextColor="#666"
-                    secureTextEntry
-                    onChangeText={(text) => setFormData({ ...formData, password: text })}
-                />
-            </Animated.View>
-            {errors.password ? <Text style={styles.error}>{errors.password}</Text> : null}
-
-            {/* Confirm Password */}
-            <Animated.View
-                style={styles.inputWrapper}
-                entering={FadeInDown.delay(200).duration(200)}
-            >
-                <Lock size={20} color="#333" style={styles.icon} />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Confirm Password"
-                    placeholderTextColor="#666"
-                    secureTextEntry
-                    onChangeText={(text) =>
-                        setFormData({ ...formData, confirmPassword: text })
-                    }
-                />
-            </Animated.View>
-            {errors.confirmPassword ? (
-                <Text style={styles.error}>{errors.confirmPassword}</Text>
-            ) : null}
-
-            <Animated.View
-                entering={FadeInDown.delay(200).duration(200)}
-            >
-                <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                    <Text style={[styles.buttonText, { fontFamily: 'sans-medium' }]}>Register</Text>
-                </TouchableOpacity>
-            </Animated.View>
-
-            <Animated.View
-                style={styles.loginRedirect}
-                entering={FadeInDown.delay(200).duration(200)}
-            >
-                <TouchableOpacity
-                    onPress={() => router.push('/Login')}
-                    style={{ flexDirection: 'row', alignItems: 'center' }}
+                {/* Username */}
+                <Animated.View
+                    style={styles.inputWrapper}
+                    entering={FadeInDown.delay(200).duration(200)}
                 >
-                    <Text>Already have an account? </Text>
-                    <Text style={{ color: '#007bff' }}>Login</Text>
-                </TouchableOpacity>
-            </Animated.View>
+                    <User size={20} color="#333" style={styles.icon} />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Username"
+                        placeholderTextColor="#666"
+                        onChangeText={(text) => setFormData({ ...formData, username: text })}
+                    />
+                </Animated.View>
+                {errors.username ? <Text style={styles.error}>{errors.username}</Text> : null}
+
+                {/* Email */}
+                <Animated.View
+                    style={styles.inputWrapper}
+                    entering={FadeInDown.delay(200).duration(200)}
+                >
+                    <Mail size={20} color="#333" style={styles.icon} />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Email"
+                        placeholderTextColor="#666"
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                        onChangeText={(text) => setFormData({ ...formData, email: text })}
+                    />
+                </Animated.View>
+                {errors.email ? <Text style={styles.error}>{errors.email}</Text> : null}
+
+                {/* Password */}
+                <Animated.View
+                    style={styles.inputWrapper}
+                    entering={FadeInDown.delay(200).duration(200)}
+                >
+                    <Lock size={20} color="#333" style={styles.icon} />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Password"
+                        placeholderTextColor="#666"
+                        secureTextEntry
+                        onChangeText={(text) => setFormData({ ...formData, password: text })}
+                    />
+                </Animated.View>
+                {errors.password ? <Text style={styles.error}>{errors.password}</Text> : null}
+
+                {/* Confirm Password */}
+                <Animated.View
+                    style={styles.inputWrapper}
+                    entering={FadeInDown.delay(200).duration(200)}
+                >
+                    <Lock size={20} color="#333" style={styles.icon} />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Confirm Password"
+                        placeholderTextColor="#666"
+                        secureTextEntry
+                        onChangeText={(text) =>
+                            setFormData({ ...formData, confirmPassword: text })
+                        }
+                    />
+                </Animated.View>
+                {errors.confirmPassword ? (
+                    <Text style={styles.error}>{errors.confirmPassword}</Text>
+                ) : null}
+
+                <Animated.View
+                    entering={FadeInDown.delay(200).duration(200)}
+                >
+                    <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                        <Text style={[styles.buttonText, { fontFamily: 'sans-medium' }]}>Register</Text>
+                    </TouchableOpacity>
+                </Animated.View>
+
+                <Animated.View
+                    style={styles.loginRedirect}
+                    entering={FadeInDown.delay(200).duration(200)}
+                >
+                    <TouchableOpacity
+                        onPress={() => router.push('/Login')}
+                        style={{ flexDirection: 'row', alignItems: 'center' }}
+                    >
+                        <Text>Already have an account? </Text>
+                        <Text style={{ color: '#007bff' }}>Login</Text>
+                    </TouchableOpacity>
+                </Animated.View>
+            </KeyboardAvoidingView>
         </LinearGradient>
     );
 }

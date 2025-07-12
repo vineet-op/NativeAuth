@@ -4,6 +4,9 @@ import { Lock, User } from 'lucide-react-native';
 import { useState } from 'react';
 import {
     Alert,
+    Image,
+    KeyboardAvoidingView,
+    Platform,
     StyleSheet,
     Text,
     TextInput,
@@ -67,74 +70,89 @@ export default function LoginScreen() {
     return (
 
         <LinearGradient colors={['#89f7fe', '#66a6ff']} style={styles.container}>
-            <Animated.Text
-                style={styles.title}
-                entering={FadeInUp.duration(200)}
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'android' ? 'padding' : 'height'}
+                keyboardVerticalOffset={Platform.OS === 'android' ? 10 : 0}
             >
-                Login into your account
-            </Animated.Text>
+                <Animated.View
+                    style={styles.logos}
+                    entering={FadeInUp.duration(200)}
+                >
+                    <Image
+                        source={require('../assets/images/react-logo.png')}
+                        style={{ width: 100, height: 100 }}
+                        resizeMode="contain"
+                    />
+                    <Animated.Text
+                        style={styles.title}
+                        entering={FadeInUp.duration(200)}
+                    >
+                        Login into your account
+                    </Animated.Text>
+                </Animated.View>
 
-            {/* Username */}
-            <Animated.View
-                style={styles.inputWrapper}
-                entering={FadeInDown.delay(200).duration(200)}
-            >
-                <User size={20} color="#333" style={styles.icon} />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Username"
-                    placeholderTextColor="#666"
-                    keyboardType="default"
-                    autoCapitalize="none"
-                    onChangeText={(text) => setFormData({ ...formData, username: text })}
-                />
-            </Animated.View>
-            {errors.username ? (<Text style={styles.errorText}>{errors.username}</Text>) : null}
-
-            {/* Password */}
-            <Animated.View
-                style={styles.inputWrapper}
-                entering={FadeInDown.delay(200).duration(200)}
-            >
-                <Lock size={20} color="#333" style={styles.icon} />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Password"
-                    placeholderTextColor="#666"
-                    secureTextEntry
-                    onChangeText={(text) => setFormData({ ...formData, password: text })}
-                />
-            </Animated.View>
-            {errors.password ? (<Text style={styles.errorText}>{errors.password}</Text>) : null}
-
-            <TouchableOpacity
-                style={styles.button}
-                onPress={handleSubmit}
-            >
-                <Animated.Text
-                    style={styles.buttonText}
+                {/* Username */}
+                <Animated.View
+                    style={styles.inputWrapper}
                     entering={FadeInDown.delay(200).duration(200)}
                 >
-                    Login
-                </Animated.Text>
-            </TouchableOpacity>
+                    <User size={20} color="#333" style={styles.icon} />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Username"
+                        placeholderTextColor="#666"
+                        keyboardType="default"
+                        autoCapitalize="none"
+                        onChangeText={(text) => setFormData({ ...formData, username: text })}
+                    />
+                </Animated.View>
+                {errors.username ? (<Text style={styles.errorText}>{errors.username}</Text>) : null}
 
-            <TouchableOpacity
-                style={styles.redirect}
-                onPress={() => router.push('/Register')}
-            >
-                <Animated.Text
+                {/* Password */}
+                <Animated.View
+                    style={styles.inputWrapper}
                     entering={FadeInDown.delay(200).duration(200)}
                 >
-                    Don't have an account?
-                </Animated.Text>
-                <Animated.Text
-                    style={{ color: '#007bff' }}
-                    entering={FadeInDown.delay(200).duration(200)}
+                    <Lock size={20} color="#333" style={styles.icon} />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Password"
+                        placeholderTextColor="#666"
+                        secureTextEntry
+                        onChangeText={(text) => setFormData({ ...formData, password: text })}
+                    />
+                </Animated.View>
+                {errors.password ? (<Text style={styles.errorText}>{errors.password}</Text>) : null}
+
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={handleSubmit}
                 >
-                    {" "}Register
-                </Animated.Text>
-            </TouchableOpacity>
+                    <Animated.Text
+                        style={styles.buttonText}
+                        entering={FadeInDown.delay(200).duration(200)}
+                    >
+                        Login
+                    </Animated.Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.redirect}
+                    onPress={() => router.push('/Register')}
+                >
+                    <Animated.Text
+                        entering={FadeInDown.delay(200).duration(200)}
+                    >
+                        Don't have an account?
+                    </Animated.Text>
+                    <Animated.Text
+                        style={{ color: '#007bff' }}
+                        entering={FadeInDown.delay(200).duration(200)}
+                    >
+                        {" "}Register
+                    </Animated.Text>
+                </TouchableOpacity>
+            </KeyboardAvoidingView>
         </LinearGradient>
     );
 }
@@ -162,6 +180,9 @@ const styles = StyleSheet.create({
     },
     icon: {
         marginRight: 8,
+    },
+    logos: {
+        alignItems: 'center',
     },
     input: {
         flex: 1,
