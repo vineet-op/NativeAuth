@@ -5,6 +5,7 @@ import { useState } from 'react';
 import {
     Alert,
     StyleSheet,
+    Text,
     TextInput,
     TouchableOpacity
 } from 'react-native';
@@ -88,6 +89,7 @@ export default function LoginScreen() {
                     onChangeText={(text) => setFormData({ ...formData, username: text })}
                 />
             </Animated.View>
+            {errors.username ? (<Text style={styles.errorText}>{errors.username}</Text>) : null}
 
             {/* Password */}
             <Animated.View
@@ -103,6 +105,7 @@ export default function LoginScreen() {
                     onChangeText={(text) => setFormData({ ...formData, password: text })}
                 />
             </Animated.View>
+            {errors.password ? (<Text style={styles.errorText}>{errors.password}</Text>) : null}
 
             <TouchableOpacity
                 style={styles.button}
@@ -155,7 +158,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffffcc',
         borderRadius: 10,
         paddingHorizontal: 10,
-        marginBottom: 15,
+        marginBottom: 8
     },
     icon: {
         marginRight: 8,
@@ -182,5 +185,10 @@ const styles = StyleSheet.create({
         marginTop: 20,
         flexDirection: 'row',
         justifyContent: 'center',
+    },
+    errorText: {
+        color: 'red',
+        textAlign: 'left',
+        padding: 1,
     },
 });
